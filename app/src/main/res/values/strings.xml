@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BakingApp</string>
+    <string name="recipe_title">Baking Time</string>
+    <string name="ingredients_title">Ingredients</string>
+</resources>
