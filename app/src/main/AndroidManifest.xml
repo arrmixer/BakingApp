@@ -17,8 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.RecipeActivity" />
-        <activity android:name=".View.IngredientListActivity"/>
-        <activity android:name=".View.StepActivity"/>
+        <activity android:name=".View.IngredientListActivity"
+            android:parentActivityName=".View.RecipeListActivity"/>
+        <activity android:name=".View.StepActivity"
+            android:parentActivityName=".View.RecipeListActivity"/>
     </application>
 
 </manifest>

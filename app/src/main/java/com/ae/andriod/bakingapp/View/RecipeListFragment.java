@@ -49,6 +49,8 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
 
     protected static final String EXTRA_LIST_STEPS_ITEM = "com.ae.andriod.bakingapp.step.list.item";
 
+    public static final String EXTRA_LIST_STEPS = "om.ae.andriod.bakingapp.ingredient.steps";
+
     /*Placeholders for Recipes*/
     private List<Recipe> mRecipeList;
 
@@ -127,7 +129,6 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
         mFragmentRecipesBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-
         return mFragmentRecipesBinding.getRoot();
 
 
@@ -144,8 +145,8 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
     public void onItemClickListener(int itemId) {
         Toast.makeText(getContext(), "working: " + itemId, Toast.LENGTH_SHORT).show();
         /*Used this convention to facilitate Master-Detail layout function but
-        * not using it with the main page only the second and third pages where the actual
-        * recipe data shows up. */
+         * not using it with the main page only the second and third pages where the actual
+         * recipe data shows up. */
         mCallbacks.onRecipeSelected(mRecipeList.get(itemId), mRecipeList);
 //        Log.i(TAG, "Steps list is empty in intent? " + mRecipeList.get(itemId).getSteps().isEmpty());
 //        Log.i(TAG, "Ingredients list is empty in intent? " + mRecipeList.get(itemId).getIngredients().isEmpty());
@@ -165,7 +166,6 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
     public void fetchRecipes() {
 
         final List<Recipe> recipes = new ArrayList<>();
-
 
         OkHttpClient client = new OkHttpClient();
 
