@@ -1,7 +1,6 @@
 package com.ae.andriod.bakingapp.View;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
@@ -53,13 +52,12 @@ public class StepFragment extends Fragment {
 
     private FragmentRecipeStepBinding mFragmentRecipeStepBinding;
 
-
     /*Following of adding a static method to the Fragment Class
      * This method will put arguments in the Bundle and then
      * attached it to the fragment. In addition, this allows for
      * more modularity so that the fragment is not dependant on its
      * container activity*/
-    public static StepFragment newInstance(Recipe recipe, int itemId){
+    public static StepFragment newInstance(Recipe recipe, int itemId) {
 
         //get data from intent of parent activity
         Bundle bundle = new Bundle();
@@ -74,11 +72,12 @@ public class StepFragment extends Fragment {
 
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
-            initializePlayer(mStep.getVideoUrl());
+            initializePlayer(mStep.getVideoURL());
         }
 
     }
@@ -86,16 +85,16 @@ public class StepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        hideSystemUi();
+         hideSystemUi();
         if ((Util.SDK_INT <= 23 || player == null)) {
-            initializePlayer(mStep.getVideoUrl());
+            initializePlayer(mStep.getVideoURL());
         }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(RecipeListFragment.EXTRA_RECIPE, mRecipe );
+        outState.putParcelable(RecipeListFragment.EXTRA_RECIPE, mRecipe);
         outState.putInt(RecipeListFragment.EXTRA_LIST_STEPS_ITEM, itemId);
     }
 
@@ -106,11 +105,11 @@ public class StepFragment extends Fragment {
         mRecipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
 
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable(RecipeListFragment.EXTRA_RECIPE);
             itemId = savedInstanceState.getInt(RecipeListFragment.EXTRA_LIST_STEPS_ITEM);
             mStep = mRecipe.getSteps().get(itemId);
-        }else{
+        } else {
             mRecipe = getArguments().getParcelable(RecipeListFragment.EXTRA_RECIPE);
             itemId = getArguments().getInt(RecipeListFragment.EXTRA_LIST_STEPS_ITEM);
             mStep = mRecipe.getSteps().get(itemId);
@@ -130,7 +129,6 @@ public class StepFragment extends Fragment {
         });
 
 
-
     }
 
     @Nullable
@@ -145,8 +143,8 @@ public class StepFragment extends Fragment {
         return mFragmentRecipeStepBinding.getRoot();
     }
 
-    private void initializePlayer(String stringUri){
-        if(player == null){
+    private void initializePlayer(String stringUri) {
+        if (player == null) {
             player = ExoPlayerFactory.newSimpleInstance(
                     new DefaultRenderersFactory(getContext()),
                     new DefaultTrackSelector(),
@@ -157,7 +155,7 @@ public class StepFragment extends Fragment {
 
             player.seekTo(currentWindow, playbackPosition);
 
-            if(stringUri.isEmpty() || stringUri == null){
+            if (stringUri.isEmpty() || stringUri == null) {
                 Toast.makeText(getContext(), "No video available for this Step", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -168,7 +166,7 @@ public class StepFragment extends Fragment {
 
     }
 
-    private MediaSource buildMediaSource(Uri uri){
+    private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource.Factory(
                 new DefaultHttpDataSourceFactory(getString(R.string.exoplayer)))
                 .createMediaSource(uri);
@@ -177,12 +175,14 @@ public class StepFragment extends Fragment {
 
     @SuppressLint("InlinedApi")
     private void hideSystemUi() {
+
         playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
     }
 
     private void releasePlayer() {
@@ -211,4 +211,9 @@ public class StepFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+    }
 }

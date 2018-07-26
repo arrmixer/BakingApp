@@ -1,11 +1,17 @@
 package com.ae.andriod.bakingapp.View;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.ae.andriod.bakingapp.BakingAppWidget;
 import com.ae.andriod.bakingapp.R;
+import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
 import com.ae.andriod.bakingapp.model.Ingredient;
 import com.ae.andriod.bakingapp.model.Recipe;
 import com.ae.andriod.bakingapp.model.Step;
@@ -29,9 +35,17 @@ public class RecipeActivity extends SingleFragmentActivity implements RecipeFrag
 
     @Override
     protected Fragment createFragment() {
-        mRecipe = getIntent().getParcelableExtra(RecipeListFragment.EXTRA_RECIPE);
-        List<Recipe> recipes = getIntent().getParcelableArrayListExtra(RecipeListFragment.EXTRA_RECIPE_LIST);
-        return RecipeFragment.newInstance(mRecipe, recipes);
+
+
+            mRecipe = getIntent().getParcelableExtra(RecipeListFragment.EXTRA_RECIPE);
+//        RecipeViewModel r = ViewModelProviders.of(this).get(RecipeViewModel.class);
+//        int id = getIntent().getIntExtra(BakingAppWidget.EXTRA_WIDGET_ID, 1);
+//        mRecipe = r.getRecipeFromDB(id);
+
+
+
+
+        return RecipeFragment.newInstance(mRecipe);
     }
 
     @Override

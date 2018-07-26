@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ae.andriod.bakingapp">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,10 +19,22 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.RecipeActivity" />
-        <activity android:name=".View.IngredientListActivity"
-            android:parentActivityName=".View.RecipeListActivity"/>
-        <activity android:name=".View.StepActivity"
-            android:parentActivityName=".View.RecipeListActivity"/>
+        <activity
+            android:name=".View.IngredientListActivity"
+            android:parentActivityName=".View.RecipeListActivity" />
+        <activity
+            android:name=".View.StepActivity"
+            android:parentActivityName=".View.RecipeListActivity" />
+
+        <receiver android:name=".BakingAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/baking_app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

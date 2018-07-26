@@ -2,6 +2,7 @@ package com.ae.andriod.bakingapp.View;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.ae.andriod.bakingapp.R;
 import com.ae.andriod.bakingapp.model.Ingredient;
@@ -23,6 +24,7 @@ public class IngredientListActivity extends SingleFragmentActivity {
 
     }
 
+
     @Override
     protected Fragment createFragment() {
         mRecipe = getIntent().getParcelableExtra(RecipeListFragment.EXTRA_RECIPE);
@@ -40,6 +42,7 @@ public class IngredientListActivity extends SingleFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
 
+
         if(savedInstanceState != null){
             mRecipe = savedInstanceState.getParcelable(EXTRA_RECIPE_TITLE);
             setTitle(mRecipe.getName());
@@ -48,4 +51,5 @@ public class IngredientListActivity extends SingleFragmentActivity {
         }
 
     }
+
 }

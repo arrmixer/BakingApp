@@ -1,5 +1,6 @@
 package com.ae.andriod.bakingapp.View;
 
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ae.andriod.bakingapp.DB.ConverterIngredient;
+import com.ae.andriod.bakingapp.DB.ConverterStep;
 import com.ae.andriod.bakingapp.R;
 import com.ae.andriod.bakingapp.Util.NetworkUtil;
 import com.ae.andriod.bakingapp.Util.RecipeResponse;
@@ -49,7 +52,7 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
 
     protected static final String EXTRA_LIST_STEPS_ITEM = "com.ae.andriod.bakingapp.step.list.item";
 
-    public static final String EXTRA_LIST_STEPS = "om.ae.andriod.bakingapp.ingredient.steps";
+    protected static final String EXTRA_LIST_STEPS = "om.ae.andriod.bakingapp.ingredient.steps";
 
     /*Placeholders for Recipes*/
     private List<Recipe> mRecipeList;
@@ -111,6 +114,15 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
                 Log.i(TAG, "Recipes total: first " + mRecipeList.size());
                 Log.i(TAG, "Steps list is empty? " + mRecipeList.get(0).getSteps().isEmpty());
                 Log.i(TAG, "Ingredients list is empty? " + mRecipeList.get(0).getIngredients().isEmpty());
+                Log.i(TAG, "Ingredients back to JSON --------------" + ConverterIngredient.fromArrayListIngredient(mRecipeList.get(0).getIngredients()));
+                Log.i(TAG, "Steps back to JSON --------------" + ConverterStep.fromArrayListStep(mRecipeList.get(0).getSteps()));
+                String ingredients = ConverterIngredient.fromArrayListIngredient(mRecipeList.get(0).getIngredients());
+                String steps = ConverterStep.fromArrayListStep(mRecipeList.get(0).getSteps());
+
+                List<Ingredient> testI = ConverterIngredient.fromStringIngredient(ingredients);
+                Log.i(TAG, "From JSON back to ingredients ---------" +  testI.toString());
+                List<Step> testS = ConverterStep.fromStringStep(steps);
+                Log.i(TAG, "From JSON back to Steps ---------" +  testS.toString());
 
             }
         });
@@ -201,6 +213,11 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
                 mRecipeList = recipes;
                 mRecipeViewModel.setLiveRecipeListData(mRecipeList);
 
+                //add the recipes to the DB
+                for(Recipe recipe : mRecipeList){
+                    mRecipeViewModel.insertMovieDB(recipe);
+                }
+
 
             }
 
@@ -232,6 +249,9 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
         List<Step> steps = recipeResponse.getStep();
 
         Recipe recipe = new Recipe(id, name, servings, image, ingredients, steps);
+
+
+
 
 
         return recipe;

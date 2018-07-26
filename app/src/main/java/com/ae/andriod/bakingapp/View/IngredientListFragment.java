@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ae.andriod.bakingapp.R;
-import com.ae.andriod.bakingapp.ViewModel.IngredientAdapter;
 import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
 import com.ae.andriod.bakingapp.model.Ingredient;
 import com.ae.andriod.bakingapp.model.Recipe;
@@ -41,8 +39,6 @@ public class IngredientListFragment extends Fragment {
 
     //DataBinding instance
     FragmentRecipeIngredientsBinding mFragmentRecipeIngredientsBinding;
-
-
 
 
 
@@ -72,6 +68,7 @@ public class IngredientListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         mRecipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
 
@@ -121,4 +118,7 @@ public class IngredientListFragment extends Fragment {
             mIngredientAdapter.notifyDataSetChanged();
         }
     }
+
+
+
 }

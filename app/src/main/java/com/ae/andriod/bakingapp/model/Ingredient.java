@@ -1,10 +1,11 @@
 package com.ae.andriod.bakingapp.model;
 
+import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 //model for storing each ingredient
-public class Ingredient implements Parcelable{
+public class Ingredient implements Parcelable {
 
     private double quantity;
     private String measure;
@@ -24,8 +25,18 @@ public class Ingredient implements Parcelable{
         return measure;
     }
 
-    public String getIngredient() {
-        return ingredient;
+    public String getIngredient() { return ingredient; }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure;
+    }
+
+    public void setIngredient(String ingredient) {
+        this.ingredient = ingredient;
     }
 
     @Override
@@ -50,7 +61,7 @@ public class Ingredient implements Parcelable{
 
     };
 
-    private Ingredient(Parcel in){
+    private Ingredient(Parcel in) {
         this.quantity = in.readDouble();
         this.measure = in.readString();
         this.ingredient = in.readString();

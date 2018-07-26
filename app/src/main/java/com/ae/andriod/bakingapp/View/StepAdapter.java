@@ -71,11 +71,9 @@ public class StepAdapter  extends RecyclerView.Adapter<StepAdapter.StepHolder>{
 
         private void bindRecipeStep(int position){
             Step step = mRecipeViewModel.getSteps().get(position);
-            if(position == 0){
-                mStepListItemBinding.txtShortDescription.setText(R.string.ingredients_title);
-            }else{
+
                 mStepListItemBinding.txtShortDescription.setText(step.getShortDescription());
-            }
+
         }
 
         @Override

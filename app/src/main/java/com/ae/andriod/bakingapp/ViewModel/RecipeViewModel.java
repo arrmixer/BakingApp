@@ -2,10 +2,12 @@ package com.ae.andriod.bakingapp.ViewModel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 
+import com.ae.andriod.bakingapp.DB.RecipeRepository;
 import com.ae.andriod.bakingapp.model.Ingredient;
 import com.ae.andriod.bakingapp.model.Recipe;
 import com.ae.andriod.bakingapp.model.Step;
@@ -19,12 +21,16 @@ public class RecipeViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Recipe>> mLiveRecipeListData;
     private final MutableLiveData<Recipe> mLiveRecipeData;
 
+    private final RecipeRepository mRecipeRepository;
+
 
 
     public RecipeViewModel(@NonNull Application application) {
         super(application);
+        mRecipeRepository = new RecipeRepository(application);
         mLiveRecipeListData = new MutableLiveData<>();
         mLiveRecipeData = new MutableLiveData<>();
+
     }
 
     public void setLiveRecipeData(Recipe recipeData){
@@ -71,6 +77,25 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public List<Step> getSteps() {
         return mRecipe.getSteps();
+    }
+
+    //DB Operations
+    public void insertMovieDB(Recipe movie){
+
+        mRecipeRepository.insertRecipeDB(movie);
+    }
+
+    public LiveData<List<Recipe>> getAllRecipes(){
+
+        return mRecipeRepository.getAllFavoriteRecipes();
+    }
+
+    public void deleteRecipeDB(Recipe movie){
+        mRecipeRepository.deleteRecipeDB(movie);
+    }
+
+    public Recipe getRecipeFromDB(int movieId){
+        return mRecipeRepository.getRecipeFromDB(movieId);
     }
 
 }

@@ -3,17 +3,13 @@ package com.ae.andriod.bakingapp.View;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.ae.andriod.bakingapp.R;
 import com.ae.andriod.bakingapp.model.Recipe;
-import com.ae.andriod.bakingapp.model.Step;
+import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.ae.andriod.bakingapp.View.RecipeActivity.EXTRA_RECIPE_TITLE;
 
@@ -22,7 +18,6 @@ public class StepActivity extends SingleFragmentActivity {
     public static final String TAG = StepActivity.class.getSimpleName();
     private Recipe mRecipe;
     private int itemId;
-
 
 
     @Override
@@ -50,13 +45,15 @@ public class StepActivity extends SingleFragmentActivity {
         setContentView(getLayoutResId());
 
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable(EXTRA_RECIPE_TITLE);
             setTitle(mRecipe.getName());
-        }else{
+        } else {
             setTitle(mRecipe.getName());
         }
 
 
     }
+
+
 }

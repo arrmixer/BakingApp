@@ -1,14 +1,14 @@
-package com.ae.andriod.bakingapp.ViewModel;
+package com.ae.andriod.bakingapp.View;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.ae.andriod.bakingapp.R;
+import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
 import com.ae.andriod.bakingapp.databinding.IngredientListItemBinding;
 import com.ae.andriod.bakingapp.model.Ingredient;
 

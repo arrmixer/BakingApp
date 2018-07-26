@@ -29,7 +29,7 @@ import com.ae.andriod.bakingapp.model.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeFragment extends Fragment implements StepAdapter.ItemClickListener{
+public class RecipeFragment extends Fragment implements StepAdapter.ItemClickListener {
 
     //Constant for Logging
     private static final String TAG = RecipeFragment.class.getSimpleName();
@@ -52,6 +52,7 @@ public class RecipeFragment extends Fragment implements StepAdapter.ItemClickLis
     //Interface for hosting activities
     public interface Callbacks {
         void onIngredientSelected(Recipe recipe);
+
         void onStepSelected(Recipe recipe, int itemId);
     }
 
@@ -69,12 +70,11 @@ public class RecipeFragment extends Fragment implements StepAdapter.ItemClickLis
      * attached it to the fragment. In addition, this allows for
      * more modularity so that the fragment is not dependant on its
      * container activity*/
-    public static RecipeFragment newInstance(Recipe recipe, List<Recipe> recipes){
+    public static RecipeFragment newInstance(Recipe recipe) {
 
         //get data from intent of parent activity
         Bundle bundle = new Bundle();
         bundle.putParcelable(RecipeListFragment.EXTRA_RECIPE, recipe);
-        bundle.putParcelableArrayList(RecipeListFragment.EXTRA_RECIPE_LIST, (ArrayList<? extends Parcelable>) recipes);
 
         //place data inside fragment
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -83,11 +83,10 @@ public class RecipeFragment extends Fragment implements StepAdapter.ItemClickLis
     }
 
 
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(RecipeListFragment.EXTRA_RECIPE, mRecipe );
+        outState.putParcelable(RecipeListFragment.EXTRA_RECIPE, mRecipe);
     }
 
     @Override
@@ -96,10 +95,10 @@ public class RecipeFragment extends Fragment implements StepAdapter.ItemClickLis
 
         mRecipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable(RecipeListFragment.EXTRA_RECIPE);
             mSteps = mRecipe.getSteps();
-        }else{
+        } else {
             mRecipe = getArguments().getParcelable(RecipeListFragment.EXTRA_RECIPE);
             mSteps = mRecipe.getSteps();
         }
@@ -122,24 +121,27 @@ public class RecipeFragment extends Fragment implements StepAdapter.ItemClickLis
         });
 
 
-
-
-
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        mFragmentRecipeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe , container, false);
+        mFragmentRecipeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe, container, false);
 
         mFragmentRecipeBinding.setLifecycleOwner(this);
 
-       mStepRecyclerView =  mFragmentRecipeBinding.recyclerViewSteps;
-       mStepRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mStepRecyclerView = mFragmentRecipeBinding.recyclerViewSteps;
+        mStepRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        return  mFragmentRecipeBinding.getRoot();
+        mFragmentRecipeBinding.txtIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.onIngredientSelected(mRecipe);
+            }
+        });
+
+        return mFragmentRecipeBinding.getRoot();
 
     }
 
@@ -153,7 +155,7 @@ public class RecipeFragment extends Fragment implements StepAdapter.ItemClickLis
 
     //make sure data is in before assigning to adapter
     private void setupAdapter() {
-        if(isAdded() && mSteps != null){
+        if (isAdded() && mSteps != null) {
             mStepAdapter = new StepAdapter(this, getContext(), mRecipeViewModel);
             mStepRecyclerView.setAdapter(mStepAdapter);
             mStepAdapter.notifyDataSetChanged();
@@ -164,13 +166,10 @@ public class RecipeFragment extends Fragment implements StepAdapter.ItemClickLis
     @Override
     public void onItemClickListener(int itemId) {
 
-        if(itemId == 0){
-            mCallbacks.onIngredientSelected(mRecipe);
-        }else{
-            Toast.makeText(getContext(), "working: " + itemId, Toast.LENGTH_SHORT).show();
-            mCallbacks.onStepSelected(mRecipe, itemId);
-            return;
-        }
+        Toast.makeText(getContext(), "working: " + itemId, Toast.LENGTH_SHORT).show();
+        mCallbacks.onStepSelected(mRecipe, itemId);
+        return;
+
 
     }
 }

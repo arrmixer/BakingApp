@@ -1,15 +1,22 @@
 package com.ae.andriod.bakingapp.model;
 
+import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 //Object for storing steps for the recipes
+
 public class Step implements Parcelable{
 
     private int id;
     private String shortDescription;
     private String description;
+
+    @SerializedName("videoURL")
     private String videoURL;
+    @SerializedName("thumbnailURL")
     private String thumbnailURL;
 
     public Step(int id, String shortDescription, String description, String videoUrl, String thumbnailURL) {
@@ -32,12 +39,32 @@ public class Step implements Parcelable{
         return description;
     }
 
-    public String getVideoUrl() {
+    public String getVideoURL() {
         return videoURL;
     }
 
     public String getThumbnailURL() {
         return thumbnailURL;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
+    }
+
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
     }
 
     @Override

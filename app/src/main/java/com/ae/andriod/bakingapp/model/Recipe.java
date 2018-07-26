@@ -1,28 +1,46 @@
 package com.ae.andriod.bakingapp.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-import com.google.gson.annotations.SerializedName;
+
+import com.ae.andriod.bakingapp.DB.ConverterIngredient;
+import com.ae.andriod.bakingapp.DB.ConverterStep;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-//main model to store all the recipe information
-public class Recipe implements Parcelable{
+/*Model for the Recipe object(POJO). */
+@Entity(tableName = "recipes")
+public class Recipe implements Parcelable {
 
     //fields from JSON
+    @PrimaryKey
+    @ColumnInfo(name = "recipe_id")
+    @NonNull
     private int id;
+
     private String name;
     private int servings;
     private String image;
 
-    //Json Arrays within Recipe Objects
 
+    //Json Arrays within Recipe Objects
+//    @Ignore
+    @TypeConverters(ConverterIngredient.class)
     private List<Ingredient> ingredients = new ArrayList<>();
+//    @Ignore
+    @TypeConverters(ConverterStep.class)
     private List<Step> steps = new ArrayList<>();
 
+//    @Ignore
     public Recipe(int id, String name, int servings, String image, List<Ingredient> ingredients, List<Step> steps) {
         this.id = id;
         this.name = name;
@@ -31,6 +49,13 @@ public class Recipe implements Parcelable{
         this.ingredients = ingredients;
         this.steps = steps;
     }
+
+//    public Recipe(@NonNull int id, String name, int servings, String image) {
+//        this.id = id;
+//        this.name = name;
+//        this.servings = servings;
+//        this.image = image;
+//    }
 
     public int getId() {
         return id;
@@ -80,6 +105,7 @@ public class Recipe implements Parcelable{
         this.steps = steps;
     }
 
+
     @Override
     public String toString() {
         return "Recipe{" +
@@ -93,6 +119,7 @@ public class Recipe implements Parcelable{
     }
 
     //Parcel section
+    @Ignore
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public Recipe createFromParcel(Parcel in) {
             return new Recipe(in);
@@ -103,7 +130,8 @@ public class Recipe implements Parcelable{
         }
     };
 
-    private Recipe(Parcel in){
+    @Ignore
+    private Recipe(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
         this.servings = in.readInt();
@@ -112,11 +140,13 @@ public class Recipe implements Parcelable{
         in.readTypedList(this.steps, Step.CREATOR);
     }
 
+    @Ignore
     @Override
     public int describeContents() {
         return 0;
     }
 
+    @Ignore
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);

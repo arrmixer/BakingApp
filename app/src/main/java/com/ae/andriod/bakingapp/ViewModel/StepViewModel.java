@@ -45,7 +45,7 @@ public class StepViewModel extends AndroidViewModel{
     }
 
     public String getVideoUrl(){
-        return mStep.getVideoUrl();
+        return mStep.getVideoURL();
     }
 
     public String getThumbnailURL(){
