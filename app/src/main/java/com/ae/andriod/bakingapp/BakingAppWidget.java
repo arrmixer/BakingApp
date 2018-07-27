@@ -5,59 +5,94 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
 import android.widget.RemoteViews;
 
-import com.ae.andriod.bakingapp.DB.RecipeRepository;
-import com.ae.andriod.bakingapp.R;
-import com.ae.andriod.bakingapp.Util.NetworkUtil;
-import com.ae.andriod.bakingapp.View.RecipeActivity;
-import com.ae.andriod.bakingapp.View.RecipeFragment;
 import com.ae.andriod.bakingapp.View.RecipeListActivity;
-import com.ae.andriod.bakingapp.View.RecipeListFragment;
-import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
-import com.ae.andriod.bakingapp.model.Recipe;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class BakingAppWidget extends AppWidgetProvider {
 
-    public static final String EXTRA_WIDGET_ID = "com.ae.andriod.bakingapp.widget.id";
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+        int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+        RemoteViews remoteView;
+        if (width < 300) {
+            remoteView = getViewForSmallerWidget(context);
+        } else {
+            remoteView = getViewForBiggerWidget(context, options);
+        }
+        appWidgetManager.updateAppWidget(appWidgetId, remoteView);
 
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    private static RemoteViews getViewForBiggerWidget(Context context, Bundle options) {
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget_big);
+
+        int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+
+        if (minHeight < 100) {
+            views.setViewVisibility(R.id.titleTextView, View.GONE);
+        }else{
+            views.setViewVisibility(R.id.titleTextView, View.VISIBLE);
+
+            Intent intent = new Intent(context, RecipeListActivity.class);
+            intent.putExtra("text","Coming from the Widget title click.");
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            views.setOnClickPendingIntent(R.id.titleTextView, pendingIntent);
+        }
+        Intent intent1 = new Intent(context, RecipeListActivity.class);
+        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, 0, intent1, 0);
+        views.setOnClickPendingIntent(R.id.widgetImageView, pendingIntent1);
+
+        Intent intent2 = new Intent(context, RecipeListActivity.class);
+        PendingIntent pendingIntent2 = PendingIntent.getActivity(context, 0, intent2, 0);
+        views.setOnClickPendingIntent(R.id.clickTextView, pendingIntent2);
+
+        return views;
+
+    }
+
+    private static RemoteViews getViewForSmallerWidget(Context context) {
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget_small);
+
+        Intent intent1 = new Intent(context, RecipeListActivity.class);
+        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, 0, intent1, 0);
+        views.setOnClickPendingIntent(R.id.widgetImageView, pendingIntent1);
+
+        Intent intent2 = new Intent(context, RecipeListActivity.class);
+        PendingIntent pendingIntent2 = PendingIntent.getActivity(context, 0, intent2, 0);
+        views.setOnClickPendingIntent(R.id.clickTextView, pendingIntent2);
+
+        return views;
+    }
+
+    public static void updateAllAppWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
+
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-            // Create an Intent to launch RecipeListActivity when clicked
-            Intent intent = new Intent(context, RecipeListActivity.class);
+        WidgetUpdateService.startActionUpdateAppWidgets(context);
+    }
 
-            intent.putExtra(EXTRA_WIDGET_ID, 4);
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        WidgetUpdateService.startActionUpdateAppWidgets(context);
 
-            // Construct the RemoteViews object
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
 
-            // Widgets allow click handlers to only launch pending intents
-            views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
-
-            // Instruct the widget manager to update the widget
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-
-        }
     }
 
     @Override
@@ -69,5 +104,7 @@ public class BakingAppWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
     }
+
+
 }
 
