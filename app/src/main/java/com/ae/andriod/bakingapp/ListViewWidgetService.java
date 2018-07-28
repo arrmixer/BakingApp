@@ -1,16 +1,27 @@
 package com.ae.andriod.bakingapp;
 
+import android.app.Application;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.app.AppLaunchChecker;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.ae.andriod.bakingapp.DB.AppDatabase;
+import com.ae.andriod.bakingapp.DB.RecipeRepository;
 import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
+import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
 import com.ae.andriod.bakingapp.model.Ingredient;
+import com.ae.andriod.bakingapp.model.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ae.andriod.bakingapp.Util.IngredientListSharedPreference.PREF_RECIPE_ID;
 
 public class ListViewWidgetService extends RemoteViewsService {
 
@@ -20,14 +31,10 @@ public class ListViewWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         Log.d(TAG, "Ingredients list is " + IngredientListSharedPreference.getPrefIngredientsQuery(getApplicationContext()));
-        return new AppWidgetListView(this.getApplicationContext(),
-                IngredientListSharedPreference.getPrefIngredientsQuery(getApplicationContext()),
-                IngredientListSharedPreference.getPrefRecipeName(getApplicationContext()),
-                IngredientListSharedPreference.getPrefRecipeId(getApplicationContext()));
+        return new AppWidgetListView(getApplication(), getApplicationContext());
+
 
     }
-
-
 
 
 }
@@ -36,6 +43,7 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
     public static final String TAG = ListViewWidgetService.class.getSimpleName();
 
     private List<Ingredient> ingredientArrayList;
+    private Application application;
     private Context context;
     private String recipeName;
 
@@ -43,19 +51,10 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
     //for use to open RecipeActivity
     private int recipeId;
 
-    public AppWidgetListView(Context context, List<Ingredient> ingredientArrayList, String recipeName, int recipeId) {
-        this.ingredientArrayList = ingredientArrayList;
+    public AppWidgetListView(Application application, Context context) {
+        this.application = application;
         this.context = context;
-        this.recipeName = recipeName;
-        this.recipeId = recipeId;
-        Log.i(TAG, "Recipe Name: " + recipeName);
-        Log.i(TAG, "Recipe ID: " + recipeId);
-        Log.i(TAG, "Ingredients size: " + ingredientArrayList.size());
-
     }
-
-
-
 
 
     @Override
@@ -66,6 +65,37 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
 
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+//
+//        ingredientArrayList = IngredientListSharedPreference.getPrefIngredientsQuery(context);
+//        recipeName = IngredientListSharedPreference.getPrefRecipeName(context);
+//        recipeId = IngredientListSharedPreference.getPrefRecipeId(context);
+
+        RecipeRepository rp = new RecipeRepository(application);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int recipeId = preferences.getInt(PREF_RECIPE_ID, -1);
+
+
+        Recipe recipe = rp.getRecipeFromDB(recipeId);
+
+        ingredientArrayList = recipe.getIngredients();
+        recipeName = recipe.getName();
+//        recipeId = 1;
+
+
+
+
+
+
+
+
+
+
+
+        Log.i(TAG, "Recipe Name: " + recipeName);
+        Log.i(TAG, "Recipe ID: " + recipeId);
+        Log.i(TAG, "Ingredients size: " + ingredientArrayList.size());
     }
 
     @Override
@@ -80,7 +110,6 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
     }
 
 
-
     @Override
     public RemoteViews getViewAt(int position) {
 
@@ -93,13 +122,13 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
         String title = ingredientArrayList.get(position).getIngredient();
 
         views.setTextViewText(R.id.titleTextView, recipeName);
-        views.setTextViewText(R.id.widget_ingredient_quantity,  quantity);
+        views.setTextViewText(R.id.widget_ingredient_quantity, quantity);
         views.setTextViewText(R.id.widget_ingredient_measure, measure);
-        views.setTextViewText(R.id.widget_ingredient_title,title);
+        views.setTextViewText(R.id.widget_ingredient_title, title);
 
-//        Intent recipeIdIntent = new Intent();
-//        recipeIdIntent.putExtra(ListViewWidgetService.EXTRA_WIDGET_RECIPE_ID, recipeId);
-//        views.setOnClickFillInIntent(R.id.parentView, recipeIdIntent);
+        Intent recipeIdIntent = new Intent();
+        recipeIdIntent.putExtra(ListViewWidgetService.EXTRA_WIDGET_RECIPE_ID, recipeId);
+        views.setOnClickFillInIntent(R.id.parentView, recipeIdIntent);
         return views;
 
 

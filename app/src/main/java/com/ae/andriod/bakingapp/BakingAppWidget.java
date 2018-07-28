@@ -34,6 +34,8 @@ public class BakingAppWidget extends AppWidgetProvider {
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteView);
 
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listView);
+
     }
 
     private static RemoteViews getViewForBiggerWidget(Context context, Bundle options) {
