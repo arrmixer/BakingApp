@@ -7,4 +7,5 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="appwidget_text2">Example 2</string>
+    <string name="empty_view_text">Empty View!</string>
 </resources>

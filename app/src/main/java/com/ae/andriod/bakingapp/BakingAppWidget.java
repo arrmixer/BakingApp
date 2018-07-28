@@ -53,6 +53,8 @@ public class BakingAppWidget extends AppWidgetProvider {
         Intent intent = new Intent(context, ListViewWidgetService.class);
         views.setRemoteAdapter(R.id.listView, intent);
 
+        views.setEmptyView(R.id.listView, R.id.empty_view);
+
         Intent appIntent = new Intent(context, RecipeActivity.class);
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.listView, appPendingIntent);

@@ -2,6 +2,7 @@ package com.ae.andriod.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -14,14 +15,16 @@ import java.util.List;
 public class ListViewWidgetService extends RemoteViewsService {
 
     public static final String EXTRA_WIDGET_RECIPE_ID = "com.ae.andriod.bakingapp.extra.widget.recipe.id";
-
+    public static final String TAG = ListViewWidgetService.class.getSimpleName();
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        Log.d(TAG, "Ingredients list is " + IngredientListSharedPreference.getPrefIngredientsQuery(getApplicationContext()));
         return new AppWidgetListView(this.getApplicationContext(),
                 IngredientListSharedPreference.getPrefIngredientsQuery(getApplicationContext()),
                 IngredientListSharedPreference.getPrefRecipeName(getApplicationContext()),
                 IngredientListSharedPreference.getPrefRecipeId(getApplicationContext()));
+
     }
 
 
@@ -30,6 +33,7 @@ public class ListViewWidgetService extends RemoteViewsService {
 }
 
 class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
+    public static final String TAG = ListViewWidgetService.class.getSimpleName();
 
     private List<Ingredient> ingredientArrayList;
     private Context context;
@@ -44,6 +48,9 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
         this.context = context;
         this.recipeName = recipeName;
         this.recipeId = recipeId;
+        Log.i(TAG, "Recipe Name: " + recipeName);
+        Log.i(TAG, "Recipe ID: " + recipeId);
+        Log.i(TAG, "Ingredients size: " + ingredientArrayList.size());
 
     }
 
@@ -53,7 +60,7 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-
+        Log.i(TAG, "OnCreate in ListViewWidgetService");
     }
 
     @Override
@@ -68,6 +75,7 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getCount() {
+        Log.i(TAG, "getCount in ListViewWidgetService called " + ingredientArrayList.size());
         return ingredientArrayList.size();
     }
 
@@ -75,6 +83,8 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
+
+        Log.i(TAG, "getViewAt in ListViewWidgetService called " + position);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.list_item_widget);
 
         //get place values
@@ -87,9 +97,9 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
         views.setTextViewText(R.id.widget_ingredient_measure, measure);
         views.setTextViewText(R.id.widget_ingredient_title,title);
 
-        Intent recipeIdIntent = new Intent();
-        recipeIdIntent.putExtra(ListViewWidgetService.EXTRA_WIDGET_RECIPE_ID, recipeId);
-        views.setOnClickFillInIntent(R.id.parentView, recipeIdIntent);
+//        Intent recipeIdIntent = new Intent();
+//        recipeIdIntent.putExtra(ListViewWidgetService.EXTRA_WIDGET_RECIPE_ID, recipeId);
+//        views.setOnClickFillInIntent(R.id.parentView, recipeIdIntent);
         return views;
 
 

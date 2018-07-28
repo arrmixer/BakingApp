@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.ae.andriod.bakingapp.DB.ConverterIngredient;
 import com.ae.andriod.bakingapp.DB.ConverterStep;
 import com.ae.andriod.bakingapp.R;
+import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
 import com.ae.andriod.bakingapp.Util.NetworkUtil;
 import com.ae.andriod.bakingapp.Util.RecipeResponse;
 import com.ae.andriod.bakingapp.Util.RecipeService;
@@ -123,6 +124,16 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
                 Log.i(TAG, "From JSON back to ingredients ---------" +  testI.toString());
                 List<Step> testS = ConverterStep.fromStringStep(steps);
                 Log.i(TAG, "From JSON back to Steps ---------" +  testS.toString());
+
+                /*Place values into sharePreferences
+                 * to be used by the widget ListView*/
+                IngredientListSharedPreference.setPrefIngredientsQuery(getContext(), mRecipeList.get(0).getIngredients());
+                IngredientListSharedPreference.setPrefRecipeName(getContext(), mRecipeList.get(0).getName());
+                IngredientListSharedPreference.setPrefRecipeId(getContext(), mRecipeList.get(0).getId());
+
+                Log.i(TAG, "SharedPreference Ingredient List: " + IngredientListSharedPreference.getPrefIngredientsQuery(getContext()) );
+                Log.i(TAG, "SharedPreference Recipe Name: " + IngredientListSharedPreference.getPrefRecipeName(getContext()));
+                Log.i(TAG, "SharedPreference Recipe Id: " + IngredientListSharedPreference.getPrefRecipeId(getContext()));
 
             }
         });
