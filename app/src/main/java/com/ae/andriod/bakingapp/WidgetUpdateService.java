@@ -12,7 +12,12 @@ import android.widget.Toast;
 
 public class WidgetUpdateService extends JobIntentService {
 
-    public static final String ACTION_UPDATE_APP_WIDGETS = "com.ae.andriod.bakingapp.WidgetUpdateService.update.app.widget";
+    public static final String ACTION_UPDATE_APP_WIDGETS = "com.ae.andriod.bakingapp.widgetupdateservice.update_app_widget";
+    public static final String ACTION_UPDATE_LIST_VIEW = "com.ae.andriod.bakingapp.widgetupdateservice.update_app_widget_list";
+
+//    public WidgetUpdateService() {
+//        super("WidgetUpdateService");
+//    }
 
     /**
      * Unique job ID for this service.
@@ -32,9 +37,27 @@ public class WidgetUpdateService extends JobIntentService {
             final String action = intent.getAction();
             if (ACTION_UPDATE_APP_WIDGETS.equals(action)) {
                 handleActionUpdateAppWidgets();
+            }else if(ACTION_UPDATE_LIST_VIEW.equals(action)){
+                handleActionUpdateListView();
             }
+
+//            if(ACTION_UPDATE_LIST_VIEW.equals(action)){
+//               handleActionUpdateListView();
+//            }
         }
     }
+
+    private void handleActionUpdateListView() {
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakingAppWidget.class));
+
+        BakingAppWidget.updateAllAppWidget(this, appWidgetManager,appWidgetIds);
+
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.listView);
+
+    }
+
 
     private void handleActionUpdateAppWidgets() {
 
@@ -47,11 +70,19 @@ public class WidgetUpdateService extends JobIntentService {
     }
 
 
-    public static void startActionUpdateAppWidgets(Context context) {
+
+    public static void startActionUpdateAppWidgets(Context context, boolean forListView) {
 
         Intent intent = new Intent(context, WidgetUpdateService.class);
-        intent.setAction(ACTION_UPDATE_APP_WIDGETS);
 
+        if(forListView){
+            intent.setAction(ACTION_UPDATE_LIST_VIEW);
+        }else {
+            intent.setAction(ACTION_UPDATE_APP_WIDGETS);
+        }
+//        context.startService(intent);
+
+        //was trying to use JobIntentService doesn't populate ListViewService
         enqueueWork(context, intent);
 
     }
@@ -72,4 +103,6 @@ public class WidgetUpdateService extends JobIntentService {
             }
         });
     }
+
+
 }

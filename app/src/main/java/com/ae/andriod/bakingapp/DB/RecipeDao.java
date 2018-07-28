@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
+import android.database.Cursor;
 
 import com.ae.andriod.bakingapp.model.Recipe;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Dao
 interface RecipeDao {
+
     @Query("SELECT * FROM recipes ORDER BY name ASC")
     LiveData<List<Recipe>> loadAllRecipes();
 
@@ -28,5 +30,6 @@ interface RecipeDao {
 
     @Query("SELECT * FROM recipes WHERE recipe_id = :id")
     Recipe loadRecipeById(int id);
+
 
 }
