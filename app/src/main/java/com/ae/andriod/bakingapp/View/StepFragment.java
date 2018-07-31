@@ -211,9 +211,4 @@ public class StepFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-    }
 }

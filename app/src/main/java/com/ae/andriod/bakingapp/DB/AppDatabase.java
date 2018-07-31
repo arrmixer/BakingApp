@@ -3,13 +3,10 @@ package com.ae.andriod.bakingapp.DB;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.util.Log;
 
-import com.ae.andriod.bakingapp.model.Ingredient;
 import com.ae.andriod.bakingapp.model.Recipe;
-import com.ae.andriod.bakingapp.model.Step;
 
 @Database(entities = {Recipe.class}, version = 1)
 //@TypeConverters({ConverterIngredient.class, ConverterStep.class})

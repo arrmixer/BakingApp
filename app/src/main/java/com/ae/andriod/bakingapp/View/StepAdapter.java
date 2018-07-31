@@ -59,7 +59,7 @@ public class StepAdapter  extends RecyclerView.Adapter<StepAdapter.StepHolder>{
 
         private final StepListItemBinding mStepListItemBinding;
 
-        public StepHolder(StepListItemBinding binding) {
+        StepHolder(StepListItemBinding binding) {
             super(binding.getRoot());
 
             mStepListItemBinding = binding;

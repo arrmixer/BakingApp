@@ -3,7 +3,7 @@
     package="com.ae.andriod.bakingapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
     <application
@@ -12,33 +12,34 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity android:name=".View.RecipeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
-        <activity android:name=".View.RecipeActivity" />
-        <activity
-            android:name=".View.IngredientListActivity"
-            android:parentActivityName=".View.RecipeListActivity" />
-        <activity
-            android:name=".View.StepActivity"
-            android:parentActivityName=".View.RecipeListActivity" />
+        <activity android:name=".View.RecipeActivity"
+            android:parentActivityName=".View.RecipeListActivity"/>
+        <activity android:name=".View.IngredientListActivity"
+            android:parentActivityName=".View.RecipeActivity" />
+        <activity android:name=".View.StepActivity"
+            android:parentActivityName=".View.RecipeActivity"/>
 
-        <service android:name=".WidgetUpdateService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false">
+        <service
+            android:name=".WidgetUpdateService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
-                <action android:name="com.ae.andriod.bakingapp.widgetupdateservice.update_app_widget"/>
-                <action android:name="com.ae.andriod.bakingapp.widgetupdateservice.update_app_widget_list"/>
+                <action android:name="com.ae.andriod.bakingapp.widgetupdateservice.update_app_widget_list" />
             </intent-filter>
         </service>
-        <service android:name=".ListViewWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false"/>
+        <service
+            android:name=".ListViewWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".BakingAppWidget">
             <intent-filter>

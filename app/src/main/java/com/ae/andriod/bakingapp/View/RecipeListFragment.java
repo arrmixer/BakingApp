@@ -1,6 +1,5 @@
 package com.ae.andriod.bakingapp.View;
 
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -17,10 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.ae.andriod.bakingapp.DB.ConverterIngredient;
-import com.ae.andriod.bakingapp.DB.ConverterStep;
 import com.ae.andriod.bakingapp.R;
-import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
 import com.ae.andriod.bakingapp.Util.NetworkUtil;
 import com.ae.andriod.bakingapp.Util.RecipeResponse;
 import com.ae.andriod.bakingapp.Util.RecipeService;
@@ -112,28 +108,19 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
                 Log.i(TAG, "OnChanged called!");
                 mRecipeList = recipes;
                 setupAdapter();
-                Log.i(TAG, "Recipes total: first " + mRecipeList.size());
-                Log.i(TAG, "Steps list is empty? " + mRecipeList.get(0).getSteps().isEmpty());
-                Log.i(TAG, "Ingredients list is empty? " + mRecipeList.get(0).getIngredients().isEmpty());
-                Log.i(TAG, "Ingredients back to JSON --------------" + ConverterIngredient.fromArrayListIngredient(mRecipeList.get(0).getIngredients()));
-                Log.i(TAG, "Steps back to JSON --------------" + ConverterStep.fromArrayListStep(mRecipeList.get(0).getSteps()));
-                String ingredients = ConverterIngredient.fromArrayListIngredient(mRecipeList.get(0).getIngredients());
-                String steps = ConverterStep.fromArrayListStep(mRecipeList.get(0).getSteps());
+//                Log.i(TAG, "Recipes total: first " + mRecipeList.size());
+//                Log.i(TAG, "Steps list is empty? " + mRecipeList.get(0).getSteps().isEmpty());
+//                Log.i(TAG, "Ingredients list is empty? " + mRecipeList.get(0).getIngredients().isEmpty());
+//                Log.i(TAG, "Ingredients back to JSON --------------" + ConverterIngredient.fromArrayListIngredient(mRecipeList.get(0).getIngredients()));
+//                Log.i(TAG, "Steps back to JSON --------------" + ConverterStep.fromArrayListStep(mRecipeList.get(0).getSteps()));
+//                String ingredients = ConverterIngredient.fromArrayListIngredient(mRecipeList.get(0).getIngredients());
+//                String steps = ConverterStep.fromArrayListStep(mRecipeList.get(0).getSteps());
+//
+//                List<Ingredient> testI = ConverterIngredient.fromStringIngredient(ingredients);
+//                Log.i(TAG, "From JSON back to ingredients ---------" +  testI.toString());
+//                List<Step> testS = ConverterStep.fromStringStep(steps);
+//                Log.i(TAG, "From JSON back to Steps ---------" +  testS.toString());
 
-                List<Ingredient> testI = ConverterIngredient.fromStringIngredient(ingredients);
-                Log.i(TAG, "From JSON back to ingredients ---------" +  testI.toString());
-                List<Step> testS = ConverterStep.fromStringStep(steps);
-                Log.i(TAG, "From JSON back to Steps ---------" +  testS.toString());
-
-                /*Place values into sharePreferences
-                 * to be used by the widget ListView*/
-                IngredientListSharedPreference.setPrefIngredientsQuery(getContext(), mRecipeList.get(0).getIngredients());
-                IngredientListSharedPreference.setPrefRecipeName(getContext(), mRecipeList.get(0).getName());
-                IngredientListSharedPreference.setPrefRecipeId(getContext(), mRecipeList.get(0).getId());
-
-                Log.i(TAG, "SharedPreference Ingredient List: " + IngredientListSharedPreference.getPrefIngredientsQuery(getContext()) );
-                Log.i(TAG, "SharedPreference Recipe Name: " + IngredientListSharedPreference.getPrefRecipeName(getContext()));
-                Log.i(TAG, "SharedPreference Recipe Id: " + IngredientListSharedPreference.getPrefRecipeId(getContext()));
 
             }
         });
@@ -149,7 +136,7 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
 
         mFragmentRecipesBinding.setLifecycleOwner(this);
 
-        mFragmentRecipesBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mFragmentRecipesBinding.recyclerViewRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
         return mFragmentRecipesBinding.getRoot();
@@ -179,7 +166,7 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
     private void setupAdapter() {
         if (isAdded() && mRecipeList != null) {
             RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, getContext(), mRecipeViewModel);
-            mFragmentRecipesBinding.recyclerView.setAdapter(recipeListAdapter);
+            mFragmentRecipesBinding.recyclerViewRecipes.setAdapter(recipeListAdapter);
             recipeListAdapter.notifyDataSetChanged();
         }
     }

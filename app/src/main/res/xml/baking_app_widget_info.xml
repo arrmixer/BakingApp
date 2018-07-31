@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialKeyguardLayout="@layout/baking_app_widget_small"
-    android:initialLayout="@layout/baking_app_widget_small"
-    android:minHeight="40dp"
-    android:minWidth="40dp"
-    android:previewImage="@mipmap/ic_launcher"
+    android:initialKeyguardLayout="@layout/baking_app_widget_big"
+    android:initialLayout="@layout/baking_app_widget_big"
+    android:minHeight="100dp"
+    android:minWidth="100dp"
+    android:previewImage="@drawable/ic_cup_cake"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen"/>

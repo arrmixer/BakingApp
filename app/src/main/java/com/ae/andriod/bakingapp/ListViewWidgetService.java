@@ -1,27 +1,18 @@
 package com.ae.andriod.bakingapp;
 
 import android.app.Application;
-import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v4.app.AppLaunchChecker;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.ae.andriod.bakingapp.DB.AppDatabase;
 import com.ae.andriod.bakingapp.DB.RecipeRepository;
 import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
-import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
 import com.ae.andriod.bakingapp.model.Ingredient;
 import com.ae.andriod.bakingapp.model.Recipe;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.ae.andriod.bakingapp.Util.IngredientListSharedPreference.PREF_RECIPE_ID;
 
 public class ListViewWidgetService extends RemoteViewsService {
 
@@ -30,7 +21,6 @@ public class ListViewWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Log.d(TAG, "Ingredients list is " + IngredientListSharedPreference.getPrefIngredientsQuery(getApplicationContext()));
         return new AppWidgetListView(getApplication(), getApplicationContext());
 
 
@@ -59,43 +49,26 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
+
         Log.i(TAG, "OnCreate in ListViewWidgetService");
+
+
     }
 
     @Override
     public void onDataSetChanged() {
 
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-//
-//        ingredientArrayList = IngredientListSharedPreference.getPrefIngredientsQuery(context);
-//        recipeName = IngredientListSharedPreference.getPrefRecipeName(context);
-//        recipeId = IngredientListSharedPreference.getPrefRecipeId(context);
+       RecipeRepository rp = new RecipeRepository(application);
+      recipeId = IngredientListSharedPreference.getPrefRecipeId(context);
 
-        RecipeRepository rp = new RecipeRepository(application);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int recipeId = preferences.getInt(PREF_RECIPE_ID, -1);
-
+        Log.i(TAG, "Recipe ID: " + recipeId);
 
         Recipe recipe = rp.getRecipeFromDB(recipeId);
-
         ingredientArrayList = recipe.getIngredients();
         recipeName = recipe.getName();
-//        recipeId = 1;
 
 
 
-
-
-
-
-
-
-
-
-        Log.i(TAG, "Recipe Name: " + recipeName);
-        Log.i(TAG, "Recipe ID: " + recipeId);
-        Log.i(TAG, "Ingredients size: " + ingredientArrayList.size());
     }
 
     @Override
@@ -121,7 +94,6 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
         String measure = ingredientArrayList.get(position).getMeasure();
         String title = ingredientArrayList.get(position).getIngredient();
 
-        views.setTextViewText(R.id.titleTextView, recipeName);
         views.setTextViewText(R.id.widget_ingredient_quantity, quantity);
         views.setTextViewText(R.id.widget_ingredient_measure, measure);
         views.setTextViewText(R.id.widget_ingredient_title, title);

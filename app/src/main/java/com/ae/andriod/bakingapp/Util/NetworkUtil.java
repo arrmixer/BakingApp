@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkUtil {
 
-    public static final String TAG = NetworkUtil.class.getSimpleName();
+    private static final String TAG = NetworkUtil.class.getSimpleName();
 
     public static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
 

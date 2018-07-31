@@ -1,10 +1,7 @@
 package com.ae.andriod.bakingapp.Util;
 
 import com.ae.andriod.bakingapp.model.Ingredient;
-import com.ae.andriod.bakingapp.model.Recipe;
 import com.ae.andriod.bakingapp.model.Step;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

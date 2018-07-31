@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,12 +20,11 @@ import android.widget.Toast;
 import com.ae.andriod.bakingapp.R;
 import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
 import com.ae.andriod.bakingapp.databinding.FragmentRecipeBinding;
-import com.ae.andriod.bakingapp.model.Ingredient;
 import com.ae.andriod.bakingapp.model.Recipe;
 import com.ae.andriod.bakingapp.model.Step;
 
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class RecipeFragment extends Fragment implements StepAdapter.ItemClickListener {
@@ -168,8 +166,6 @@ public class RecipeFragment extends Fragment implements StepAdapter.ItemClickLis
 
         Toast.makeText(getContext(), "working: " + itemId, Toast.LENGTH_SHORT).show();
         mCallbacks.onStepSelected(mRecipe, itemId);
-        return;
-
 
     }
 }

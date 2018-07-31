@@ -1,14 +1,19 @@
 package com.ae.andriod.bakingapp.View;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
+import com.ae.andriod.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.ae.andriod.bakingapp.R;
-import com.ae.andriod.bakingapp.model.Ingredient;
+import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
+import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
 import com.ae.andriod.bakingapp.model.Recipe;
 
-import java.util.List;
 
 import static com.ae.andriod.bakingapp.View.RecipeActivity.EXTRA_RECIPE_TITLE;
 
@@ -16,6 +21,10 @@ public class IngredientListActivity extends SingleFragmentActivity {
 
     public static final String TAG = IngredientListActivity.class.getSimpleName();
     private Recipe mRecipe;
+
+    // The Idling Resource which will be null in production.
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -27,7 +36,14 @@ public class IngredientListActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        mRecipe = getIntent().getParcelableExtra(RecipeListFragment.EXTRA_RECIPE);
+        if(getIntent().hasExtra(RecipeListFragment.EXTRA_RECIPE)) {
+            mRecipe = getIntent().
+                    getParcelableExtra(RecipeListFragment.EXTRA_RECIPE);
+        }else{
+            //Get corresponding Data from DB
+            RecipeViewModel vm = ViewModelProviders.of(this).get(RecipeViewModel.class);
+            mRecipe = vm.getRecipeFromDB(IngredientListSharedPreference.getPrefRecipeId(this));
+        }
 
         return IngredientListFragment.newInstance(mRecipe);
     }
@@ -35,6 +51,18 @@ public class IngredientListActivity extends SingleFragmentActivity {
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_masterdetail;
+    }
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
     }
 
     @Override
@@ -49,6 +77,8 @@ public class IngredientListActivity extends SingleFragmentActivity {
         }else{
             setTitle(mRecipe.getName());
         }
+
+        getIdlingResource();
 
     }
 

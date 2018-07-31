@@ -1,6 +1,5 @@
 package com.ae.andriod.bakingapp;
 
-import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,12 +11,8 @@ import android.widget.Toast;
 
 public class WidgetUpdateService extends JobIntentService {
 
-    public static final String ACTION_UPDATE_APP_WIDGETS = "com.ae.andriod.bakingapp.widgetupdateservice.update_app_widget";
     public static final String ACTION_UPDATE_LIST_VIEW = "com.ae.andriod.bakingapp.widgetupdateservice.update_app_widget_list";
 
-//    public WidgetUpdateService() {
-//        super("WidgetUpdateService");
-//    }
 
     /**
      * Unique job ID for this service.
@@ -35,15 +30,10 @@ public class WidgetUpdateService extends JobIntentService {
     protected void onHandleWork(@NonNull Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_UPDATE_APP_WIDGETS.equals(action)) {
-                handleActionUpdateAppWidgets();
-            }else if(ACTION_UPDATE_LIST_VIEW.equals(action)){
+            if (ACTION_UPDATE_LIST_VIEW.equals(action)) {
                 handleActionUpdateListView();
             }
 
-//            if(ACTION_UPDATE_LIST_VIEW.equals(action)){
-//               handleActionUpdateListView();
-//            }
         }
     }
 
@@ -52,37 +42,17 @@ public class WidgetUpdateService extends JobIntentService {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakingAppWidget.class));
 
-        BakingAppWidget.updateAllAppWidget(this, appWidgetManager,appWidgetIds);
-
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.listView);
+        BakingAppWidget.updateAllAppWidget(this, appWidgetManager, appWidgetIds);
 
     }
 
 
-    private void handleActionUpdateAppWidgets() {
-
-        //You can do any task regarding this process you want to do here, then update the widget.
-
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakingAppWidget.class));
-
-        BakingAppWidget.updateAllAppWidget(this, appWidgetManager,appWidgetIds);
-    }
-
-
-
-    public static void startActionUpdateAppWidgets(Context context, boolean forListView) {
+    public static void startActionUpdateAppWidgets(Context context) {
 
         Intent intent = new Intent(context, WidgetUpdateService.class);
 
-        if(forListView){
-            intent.setAction(ACTION_UPDATE_LIST_VIEW);
-        }else {
-            intent.setAction(ACTION_UPDATE_APP_WIDGETS);
-        }
-//        context.startService(intent);
+        intent.setAction(ACTION_UPDATE_LIST_VIEW);
 
-        //was trying to use JobIntentService doesn't populate ListViewService
         enqueueWork(context, intent);
 
     }
@@ -98,7 +68,8 @@ public class WidgetUpdateService extends JobIntentService {
     // Helper for showing tests
     void toast(final CharSequence text) {
         mHandler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Toast.makeText(WidgetUpdateService.this, text, Toast.LENGTH_SHORT).show();
             }
         });

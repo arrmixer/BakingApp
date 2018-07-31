@@ -1,13 +1,14 @@
 package com.ae.andriod.bakingapp.View;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
 import com.ae.andriod.bakingapp.R;
+import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
+import com.ae.andriod.bakingapp.ViewModel.RecipeViewModel;
 import com.ae.andriod.bakingapp.model.Recipe;
-import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.util.ArrayList;
 
@@ -29,8 +30,19 @@ public class StepActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
+
+        if(getIntent().hasExtra(RecipeListFragment.EXTRA_RECIPE)) {
+            mRecipe = getIntent().
+                    getParcelableExtra(RecipeListFragment.EXTRA_RECIPE);
+            itemId = getIntent().getIntExtra(RecipeListFragment.EXTRA_LIST_STEPS_ITEM, 1);
+        }else{
+            //Get corresponding Data from DB
+            RecipeViewModel vm = ViewModelProviders.of(this).get(RecipeViewModel.class);
+            mRecipe = vm.getRecipeFromDB(IngredientListSharedPreference.getPrefRecipeId(this));
+            itemId = IngredientListSharedPreference.getPrefStepId(this);
+        }
         mRecipe = getIntent().getParcelableExtra(RecipeListFragment.EXTRA_RECIPE);
-        itemId = getIntent().getIntExtra(RecipeListFragment.EXTRA_LIST_STEPS_ITEM, 1);
+
         return StepFragment.newInstance(mRecipe, itemId);
     }
 

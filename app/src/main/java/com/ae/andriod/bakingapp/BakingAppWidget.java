@@ -8,12 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.TextView;
+
 
 import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
-import com.ae.andriod.bakingapp.Util.NetworkUtil;
 import com.ae.andriod.bakingapp.View.RecipeActivity;
-import com.ae.andriod.bakingapp.View.RecipeListActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -26,11 +24,8 @@ public class BakingAppWidget extends AppWidgetProvider {
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         RemoteViews remoteView;
-        if (width < 300) {
-            remoteView = getViewForSmallerWidget(context);
-        } else {
-            remoteView = getViewForBiggerWidget(context, options);
-        }
+
+        remoteView = getViewForBiggerWidget(context, options);
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteView);
 
@@ -42,14 +37,15 @@ public class BakingAppWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget_big);
 
         int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
-
         if (minHeight < 100) {
             views.setViewVisibility(R.id.titleTextView, View.GONE);
-        } else {
+        }else{
             views.setViewVisibility(R.id.titleTextView, View.VISIBLE);
-            Intent intentTitle = new Intent(context, RecipeListActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentTitle, PendingIntent.FLAG_UPDATE_CURRENT);
-            views.setOnClickPendingIntent(R.id.titleTextView, pendingIntent);
+
+            String recipeName = IngredientListSharedPreference.getPrefRecipeName(context);
+
+            views.setTextViewText(R.id.titleTextView, recipeName);
+
         }
 
         Intent intent = new Intent(context, ListViewWidgetService.class);
@@ -59,27 +55,11 @@ public class BakingAppWidget extends AppWidgetProvider {
 
         Intent appIntent = new Intent(context, RecipeActivity.class);
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setOnClickPendingIntent(R.id.listView, appPendingIntent);
+        views.setPendingIntentTemplate(R.id.listView, appPendingIntent);
 
         return views;
 
     }
-
-    private static RemoteViews getViewForSmallerWidget(Context context) {
-
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget_small);
-
-        Intent intent1 = new Intent(context, RecipeListActivity.class);
-        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, 0, intent1, 0);
-        views.setOnClickPendingIntent(R.id.widgetImageView, pendingIntent1);
-
-        Intent intent2 = new Intent(context, RecipeListActivity.class);
-        PendingIntent pendingIntent2 = PendingIntent.getActivity(context, 0, intent2, 0);
-        views.setOnClickPendingIntent(R.id.clickTextView, pendingIntent2);
-
-        return views;
-    }
-
 
     public static void updateAllAppWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
@@ -91,24 +71,18 @@ public class BakingAppWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        WidgetUpdateService.startActionUpdateAppWidgets(context, false);
+        WidgetUpdateService.startActionUpdateAppWidgets(context);
     }
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        //if need width
+//        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+//        int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
 
-        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
-        int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
-
-        if (width < 300) {
-            WidgetUpdateService.startActionUpdateAppWidgets(context, false);
-        } else {
-            WidgetUpdateService.startActionUpdateAppWidgets(context, true);
-        }
-
+        WidgetUpdateService.startActionUpdateAppWidgets(context);
 
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
-
     }
 
     @Override
