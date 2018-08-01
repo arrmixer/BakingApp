@@ -7,8 +7,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.ae.andriod.bakingapp.DB.RecipeRepository;
-import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
+import com.ae.andriod.bakingapp.db.RecipeRepository;
+import com.ae.andriod.bakingapp.util.IngredientListSharedPreference;
 import com.ae.andriod.bakingapp.model.Ingredient;
 import com.ae.andriod.bakingapp.model.Recipe;
 

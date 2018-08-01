@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModelRecipe"
-            type="com.ae.andriod.bakingapp.ViewModel.RecipeViewModel"/>
+            type="com.ae.andriod.bakingapp.viewmodel.RecipeViewModel"/>
     </data>
 
     <android.support.v7.widget.CardView

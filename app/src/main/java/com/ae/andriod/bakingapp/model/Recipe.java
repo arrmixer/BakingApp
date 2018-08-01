@@ -10,8 +10,8 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 
-import com.ae.andriod.bakingapp.DB.ConverterIngredient;
-import com.ae.andriod.bakingapp.DB.ConverterStep;
+import com.ae.andriod.bakingapp.db.ConverterIngredient;
+import com.ae.andriod.bakingapp.db.ConverterStep;
 
 import java.util.ArrayList;
 import java.util.List;

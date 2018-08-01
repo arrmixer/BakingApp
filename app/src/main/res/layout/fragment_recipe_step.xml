@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -7,7 +8,7 @@
 
         <variable
             name="viewModelRecipe"
-            type="com.ae.andriod.bakingapp.ViewModel.RecipeViewModel" />
+            type="com.ae.andriod.bakingapp.viewmodel.RecipeViewModel" />
     </data>
 
     <ScrollView
@@ -37,7 +38,13 @@
                         android:id="@+id/video_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        card_view:auto_show="true" />
+                        card_view:auto_show="true"
+                        card_view:controller_layout_id="@layout/custom_controls"
+                        card_view:default_artwork="@drawable/loading_exovideo"
+                        card_view:fastforward_increment="1000"
+                        card_view:rewind_increment="1000"
+                        card_view:show_timeout="5000"
+                        card_view:use_artwork="true" />
 
                 </LinearLayout>
 

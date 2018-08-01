@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 
-import com.ae.andriod.bakingapp.Util.IngredientListSharedPreference;
-import com.ae.andriod.bakingapp.View.RecipeActivity;
+import com.ae.andriod.bakingapp.util.IngredientListSharedPreference;
+import com.ae.andriod.bakingapp.view.RecipeActivity;
 
 /**
  * Implementation of App Widget functionality.

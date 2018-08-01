@@ -14,19 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".View.RecipeListActivity">
+        <activity android:name=".view.RecipeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
-        <activity android:name=".View.RecipeActivity"
-            android:parentActivityName=".View.RecipeListActivity"/>
-        <activity android:name=".View.IngredientListActivity"
-            android:parentActivityName=".View.RecipeActivity" />
-        <activity android:name=".View.StepActivity"
-            android:parentActivityName=".View.RecipeActivity"/>
+        <activity android:name=".view.RecipeActivity"
+            android:parentActivityName=".view.RecipeListActivity"/>
+        <activity android:name=".view.IngredientListActivity"
+            android:parentActivityName=".view.RecipeActivity" />
+        <activity android:name=".view.StepActivity"
+            android:parentActivityName=".view.RecipeActivity"/>
 
         <service
             android:name=".WidgetUpdateService"
